@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Colocation;
 use App\Http\Requests\StoreColocationRequest;
 use App\Http\Requests\UpdateColocationRequest;
+use Illuminate\Support\Facades\Auth;
 
 class ColocationController extends Controller
 {
@@ -29,22 +30,33 @@ class ColocationController extends Controller
      */
     public function store(StoreColocationRequest $request)
     {
-        Colocation::create([
+        $colocation = Colocation::create([
             'name'=> $request->name,
             'description' => $request->description,
+            'user_id'=>Auth::id(),
             
         ]);
         
-
-        return back()->with('succes', 'nouveau colocation');
+        // 2️⃣ ajouter automatiquement le créateur comme membre
+        $colocation->users()->attach(Auth::id(), [
+            'role' => 'owner',
+            'is_member' => 'oui',
+        ]);
+        return back()->with([
+            'success' => 'Nouvelle colocation créée !',
+            'colocation' => $colocation,
+        ]);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Colocation $colocation)
+    public function show()
     {
-        //
+        // Récupérer toutes les colocations
+        $colocations = Colocation::with('users', 'creator')->get();
+
+        return view('colocation', compact('colocations'));
     }
 
     /**
@@ -69,5 +81,28 @@ class ColocationController extends Controller
     public function destroy(Colocation $colocation)
     {
         //
+    }
+
+
+    public function rejoindre($colocationId)
+    {
+        $user = Auth::user();
+
+        // Vérifier si l'utilisateur est déjà membre actif d'une colocation
+        $dejaMembre = $user->colocations()
+                        ->wherePivot('is_member', 'oui')
+                        ->exists();
+
+        if ($dejaMembre) {
+            return back()->with('error', 'Vous êtes déjà membre d’une colocation.');
+        }
+
+        // Sinon, il peut rejoindre
+        $user->colocations()->attach($colocationId, [
+            'role' => 'member',
+            'is_member' => 'oui',
+        ]);
+
+        return back()->with('success', 'Vous avez rejoint la colocation.');
     }
 }

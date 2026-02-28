@@ -38,6 +38,15 @@
         <main class="flex-1 p-8">
             <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
                 <div>
+                    @if ($errors->any())
+                        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>• {{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <h2 class="text-xl font-black text-gray-800 uppercase tracking-wider">@yield('page_title')</h2>
                 </div>
                 <div class="flex items-center gap-4">

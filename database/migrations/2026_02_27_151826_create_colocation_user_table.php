@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->name('colocation_user_users_foreign');
             $table->foreignId('colocation_id')->constrained('colocations')->name('colocations_users_colocations_foreign');
             $table->string('role');
+            $table->string('is_member');
             $table->unique('colocation_id', 'user_id');
             $table->timestamps();
         });

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use App\Models\Colocation;
 
 class User extends Authenticatable
 {
@@ -44,5 +45,17 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+    
+    public function createdColocations()
+    {
+        return $this->hasMany(Colocation::class);
+    }
+
+    public function colocations()
+    {
+        return $this->belongsToMany(Colocation::class)
+                    ->withPivot('role', 'is_member')
+                    ->withTimestamps();
     }
 }

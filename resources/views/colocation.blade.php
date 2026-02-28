@@ -1,19 +1,123 @@
 @extends('layouts.app')
 
+
+{{--
+@section('page_title', 'COLOC 1')
+
+@section('header_actions')
+    <button class="flex items-center gap-2 px-4 py-2 text-red-500 border border-red-100 bg-white rounded-xl hover:bg-red-50 transition text-sm font-bold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path></svg>
+        Annuler la colocation
+    </button>
+    <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-6 py-2 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition text-sm font-bold">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+        Retour
+    </a>
+@endsection
+
+@section('content')
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+    
+    <div class="lg:col-span-2 space-y-6">
+        <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-gray-800">Dépenses récentes</h3>
+            <button class="px-5 py-2.5 bg-indigo-600 text-white rounded-xl font-bold text-sm shadow-sm hover:bg-indigo-700 transition flex items-center gap-2">
+                <span class="text-lg">+</span> Nouvelle dépense
+            </button>
+        </div>
+
+        <div class="bg-white rounded-3xl border border-gray-100 shadow-sm overflow-hidden">
+            <div class="p-6 border-b border-gray-50 flex items-center gap-4">
+                <div class="flex items-center gap-2 px-4 py-2 bg-gray-50 rounded-lg text-indigo-600 font-medium text-sm">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M3 3a1 1 0 011-1h12a1 1 0 011 1v3a1 1 0 01-.293.707L12 11.414V15a1 1 0 01-.293.707l-2 2A1 1 0 018 17v-5.586L3.293 6.707A1 1 0 013 6V3z"></path></svg>
+                    Filtrer par mois :
+                </div>
+                <select class="bg-white border border-gray-200 rounded-lg px-4 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <option>Tous les mois</option>
+                </select>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-left">
+                    <thead class="bg-gray-50/50">
+                        <tr>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Titre / Catégorie</th>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Payeur</th>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Montant</th>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="4" class="px-6 py-20 text-center text-gray-400 italic text-sm">
+                                Aucune dépense pour le moment.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="space-y-8">
+        <div>
+            <h3 class="text-xl font-bold text-gray-800 mb-6">Qui doit à qui ?</h3>
+            <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-10 flex flex-col items-center justify-center text-center">
+                <p class="text-gray-400 text-sm italic">Aucun remboursement en attente.</p>
+            </div>
+        </div>
+
+        <div class="bg-[#1e293b] rounded-3xl p-6 shadow-xl">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-white font-bold">Membres de la coloc</h3>
+                <span class="bg-gray-700 text-[10px] text-gray-300 px-2 py-1 rounded font-bold uppercase tracking-tighter">Actifs</span>
+            </div>
+
+            <div class="space-y-4">
+                <div class="flex items-center justify-between group">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-gray-700 flex items-center justify-center text-white font-bold">A</div>
+                        <div>
+                            <p class="text-sm font-bold text-white">admin</p>
+                            <p class="text-[10px] text-orange-400 font-bold flex items-center gap-1 uppercase">
+                                <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+                                Owner
+                            </p>
+                        </div>
+                    </div>
+                    <span class="text-emerald-400 font-bold text-sm">0</span>
+                </div>
+
+                <hr class="border-gray-700/50">
+
+                <button class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+                    Inviter un membre
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+@endsection
+--}}
+
+
 {{-- 1. Titre dynamique passé au Layout --}}
 @section('page_title', 'Mes colocations')
 
 {{-- 2. Bouton d'action passé au Header du Layout --}}
 @section('header_actions')
-    <button onclick="toggleModal()" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex items-center transform active:scale-95">
-        <span class="mr-2 text-base">+</span> {{ __('Nouvelle colocation') }}
-    </button>
+<button onclick="toggleModal()" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex items-center transform active:scale-95">
+    <span class="mr-2 text-base">+</span> {{ __('Nouvelle colocation') }}
+</button>
 @endsection
 
 @section('content')
+@isset($colocations)
     {{-- Grille des cartes --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         
+        @foreach($colocations as $colocation)
         <div class="relative bg-white p-8 rounded-[2.5rem] border border-indigo-100/50 shadow-xl shadow-indigo-100/20 group transition-all">
             <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span class="flex items-center gap-1 px-4 py-1.5 bg-orange-500 text-white text-[10px] font-black rounded-full shadow-lg shadow-orange-200 uppercase">
@@ -25,9 +129,9 @@
             </div>
 
             <div class="mt-4 flex flex-col items-start">
-                <div class="w-14 h-14 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-black mb-6 shadow-lg shadow-indigo-200">C</div>
-                <h3 class="text-xl font-black text-indigo-700 mb-1 tracking-tight italic">coloc 3</h3>
-                <p class="text-[11px] font-bold text-indigo-400 uppercase tracking-widest italic">1 Membres</p>
+                <div class="p-2 bg-indigo-600 rounded-2xl flex items-center justify-center text-white text-2xl font-black mb-6 shadow-lg shadow-indigo-200">{{ $colocation->creator->name }}</div>
+                <h3 class="text-xl font-black text-indigo-700 mb-1 tracking-tight italic">{{ $colocation->name }}</h3>
+                <p class="text-[11px] font-bold text-indigo-400 uppercase tracking-widest italic">{{ $colocation->users()->count() }} Membres</p>
             </div>
 
             <div class="mt-12 flex justify-between items-end border-t border-gray-50 pt-6">
@@ -35,13 +139,18 @@
                     <p class="text-[10px] font-black text-gray-300 uppercase tracking-widest mb-1 italic">Dépenses</p>
                     <p class="text-2xl font-black text-indigo-900 leading-none">0</p>
                 </div>
-                <button class="w-11 h-11 bg-[#111827] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-gray-200 transform group-hover:translate-x-1 transition-all">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                </button>
+                <form action="{{ route('colocations.rejoindre', $colocation->id) }}" method="POST">
+                    @csrf
+
+                    <button class="w-11 h-11 bg-[#111827] rounded-2xl flex items-center justify-center text-white shadow-lg shadow-gray-200 transform group-hover:translate-x-1 transition-all">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </button>
+                </form>
             </div>
         </div>
-
-        <div class="relative bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm opacity-90">
+        @endforeach
+        
+        <!-- <div class="relative bg-white p-8 rounded-[2.5rem] border border-gray-100 shadow-sm opacity-90">
             <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span class="flex items-center gap-1 px-4 py-1.5 bg-orange-500 text-white text-[10px] font-black rounded-full shadow-lg shadow-orange-200 uppercase opacity-80">
                     👑 OWNER
@@ -65,7 +174,7 @@
                 </button>
             </div>
         </div>
-
+        
         <div class="relative bg-white/40 p-8 rounded-[2.5rem] border border-dashed border-gray-200 opacity-60 grayscale-[0.5]">
             <div class="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <span class="flex items-center gap-1 px-4 py-1.5 bg-slate-400 text-white text-[10px] font-black rounded-full shadow-md uppercase">🚪 QUITTÉE</span>
@@ -81,9 +190,10 @@
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
                 </div>
             </div>
-        </div>
+        </div> -->
     </div>
-
+    @endisset
+    
     {{-- Fenêtre Modale --}}
     <div id="colocModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/20 backdrop-blur-sm transition-opacity">
         <div class="bg-white w-full max-w-2xl p-10 rounded-[2.5rem] shadow-2xl border border-gray-50 transform transition-all">
@@ -127,3 +237,6 @@
     }
 </script>
 @endpush
+
+
+

@@ -13,6 +13,18 @@ class Colocation extends Model
     protected $fillable = [
         'name',
         'description',
+        'user_id',
     ];
     
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function users()
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('role', 'is_member')
+            ->withTimestamps();
+    }
 }
