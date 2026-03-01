@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
 
-{{--
+@if($dejaMembre)
+
 @section('page_title', 'COLOC 1')
 
 @section('header_actions')
@@ -11,7 +12,7 @@
     </button>
     <a href="{{ route('dashboard') }}" class="flex items-center gap-2 px-6 py-2 bg-gray-900 text-white rounded-xl hover:bg-gray-800 transition text-sm font-bold">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
-        Retour
+        Quitter
     </a>
 @endsection
 
@@ -90,7 +91,7 @@
 
                 <hr class="border-gray-700/50">
 
-                <button class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
+                <button onclick="toggleModal('inviteModal')" class="w-full py-3 bg-gray-700/50 hover:bg-gray-700 text-white rounded-xl text-sm font-bold transition flex items-center justify-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
                     Inviter un membre
                 </button>
@@ -98,21 +99,47 @@
         </div>
     </div>
 </div>
-@endsection
---}}
 
+{{-- Fenêtre Modale invitation --}}
+    <div id="inviteModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/20 backdrop-blur-sm transition-opacity">
+        <div class="bg-white w-full max-w-2xl p-10 rounded-[2.5rem] shadow-2xl border border-gray-50 transform transition-all">
+            <h2 class="text-sm font-black text-gray-800 uppercase tracking-widest italic mb-8">Invitatiion par email</h2>
+            <form action="{{ route('invitations.send', $colocation->id) }}" method="POST">
+                @csrf
+                <div class="mb-6">
+                    <label class="block text-[11px] font-black text-indigo-900 uppercase tracking-wider mb-2 italic">Email d'utilisateur</label>
+                    <input type="email" name="email" placeholder="ex: Résidence Les Lilas" required
+                           class="w-full px-5 py-3 rounded-2xl border-gray-100 bg-gray-50/50 text-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                </div>
+                <div class="flex items-center gap-6">
+                    <button type="submit" class="px-8 py-3 bg-[#4f46e5] text-white text-xs font-black rounded-2xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all uppercase tracking-widest">
+                        Créer la colocation
+                    </button>
+                    <button type="button" onclick="toggleModal('inviteModal')" class="text-xs font-black text-gray-400 hover:text-gray-600 uppercase tracking-widest transition-colors">
+                        Annuler
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+@endsection
+
+
+@else
 
 {{-- 1. Titre dynamique passé au Layout --}}
 @section('page_title', 'Mes colocations')
 
 {{-- 2. Bouton d'action passé au Header du Layout --}}
 @section('header_actions')
-<button onclick="toggleModal()" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex items-center transform active:scale-95">
+<button onclick="toggleModal('createModal')" class="bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-bold shadow-lg shadow-indigo-200 hover:bg-indigo-700 transition flex items-center transform active:scale-95">
     <span class="mr-2 text-base">+</span> {{ __('Nouvelle colocation') }}
 </button>
 @endsection
 
 @section('content')
+
 @isset($colocations)
     {{-- Grille des cartes --}}
     <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -194,8 +221,8 @@
     </div>
     @endisset
     
-    {{-- Fenêtre Modale --}}
-    <div id="colocModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/20 backdrop-blur-sm transition-opacity">
+    {{-- Fenêtre Modale ajouter une colocation --}}
+    <div id="createModal" class="fixed inset-0 z-50 hidden flex items-center justify-center bg-slate-900/20 backdrop-blur-sm transition-opacity">
         <div class="bg-white w-full max-w-2xl p-10 rounded-[2.5rem] shadow-2xl border border-gray-50 transform transition-all">
             <h2 class="text-sm font-black text-gray-800 uppercase tracking-widest italic mb-8">NOUVELLE COLOCATION</h2>
             <form action="/cree_coloc" method="POST">
@@ -214,7 +241,7 @@
                     <button type="submit" class="px-8 py-3 bg-[#4f46e5] text-white text-xs font-black rounded-2xl shadow-lg shadow-indigo-100 hover:bg-indigo-700 transition-all uppercase tracking-widest">
                         Créer la colocation
                     </button>
-                    <button type="button" onclick="toggleModal()" class="text-xs font-black text-gray-400 hover:text-gray-600 uppercase tracking-widest transition-colors">
+                    <button type="button" onclick="toggleModal('createModal')" class="text-xs font-black text-gray-400 hover:text-gray-600 uppercase tracking-widest transition-colors">
                         Annuler
                     </button>
                 </div>
@@ -223,20 +250,30 @@
     </div>
 @endsection
 
+@endif
 @push('scripts')
 <script>
-    function toggleModal() {
-        const modal = document.getElementById('colocModal');
+    function toggleModal(modalId) {
+        const modal = document.getElementById(modalId);
         modal.classList.toggle('hidden');
-        document.body.style.overflow = modal.classList.contains('hidden') ? 'auto' : 'hidden';
+
+        document.body.style.overflow =
+            modal.classList.contains('hidden') ? 'auto' : 'hidden';
     }
 
     window.onclick = function(event) {
-        const modal = document.getElementById('colocModal');
-        if (event.target == modal) toggleModal();
+        const createModal = document.getElementById('createModal');
+        const inviteModal = document.getElementById('inviteModal');
+
+        if (event.target == createModal) {
+            toggleModal('createModal');
+        }
+
+        if (event.target == inviteModal) {
+            toggleModal('inviteModal');
+        }
     }
 </script>
 @endpush
-
 
 

@@ -14,7 +14,7 @@ class ColocationController extends Controller
      */
     public function index()
     {
-        //
+        
     }
 
     /**
@@ -53,10 +53,31 @@ class ColocationController extends Controller
      */
     public function show()
     {
-        // Récupérer toutes les colocations
-        $colocations = Colocation::with('users', 'creator')->get();
+        $user = Auth::user();
 
-        return view('colocation', compact('colocations'));
+        // Vérifie si l'utilisateur est membre actif d'une colocation
+        $colocationActive = $user->colocations()
+                                ->wherePivot('is_member', 'oui')
+                                ->first(); // récupère la première colocation active
+
+        if ($colocationActive) {
+            // L'utilisateur est déjà membre → afficher cette colocation seule
+            return view('colocation', [
+                'colocation' => $colocationActive,
+                'dejaMembre' => true
+            ]);
+            
+        } else {
+            // L'utilisateur n'est membre d'aucune colocation → afficher toutes les colocations
+            // $colocations = Colocation::with('users', 'creator')->get();
+
+            $colocations = $user->colocations()
+                                ->wherePivot('is_member', 'non'); // récupère les colocations que j'ai rejoindre
+            return view('colocation', [
+                'colocations' => $colocations,
+                'dejaMembre' => false
+            ]);
+        }
     }
 
     /**
@@ -104,5 +125,16 @@ class ColocationController extends Controller
         ]);
 
         return back()->with('success', 'Vous avez rejoint la colocation.');
+    }
+
+    public function quitter($colocationId)
+    {
+        $user = Auth::user();
+
+        $user->colocations()->updateExistingPivot($colocationId, [
+            'is_member' => 'non'
+        ]);
+
+        return back()->with('success', 'Vous avez quitté la colocation.');
     }
 }

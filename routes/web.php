@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\ColocationController;
+use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,10 +34,22 @@ Route::middleware('auth')->group(function () {
     Route::post('/colocations/{id}/rejoindre', [ColocationController::class, 'rejoindre'])
         ->name('colocations.rejoindre');
 
+    // Quitter une colocation
+    Route::post('/colocations/{id}/quiter', [ColocationController::class, 'quitter'])
+     ->name('colocations.quiter');
+
+    // envoyé une invitation
+    Route::post('/colocations/{colocation}/invite', 
+        [InvitationController::class, 'sendInvitation']
+    )->name('invitations.send');
+
     // Admin
     Route::get('/admin', function () {
         return view('administration');
     });
+
+    Route::get('/invitations/{token}', [InvitationController::class, 'accept'])
+    ->name('invitations.accept');
 
 });
 

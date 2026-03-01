@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->foreignId('user_id')->constrained('users')->name('categories_users_foreign');
-            $table->foreignId('colocation_id')->constrained('colocations')->name('categories_colocations_foreign');
+            $table->foreignId('colocation_id')->constrained('colocations')->onDelete('cascade')->name('categories_colocations_foreign');
             $table->timestamps();
         });
     }
