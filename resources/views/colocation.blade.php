@@ -106,7 +106,9 @@
         <div>
             <h3 class="text-xl font-bold text-gray-800 mb-6">Qui doit à qui ?</h3>
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-10 flex flex-col items-center justify-center text-center">
-                <p class="text-gray-400 text-sm italic">Aucun remboursement en attente.</p>
+                <div class="bg-white rounded-3xl border border-gray-100 p-10 flex flex-col items-center justify-center text-center">
+                    <p class="text-gray-400 text-sm italic font-medium">Aucun remboursement en attente.</p>
+                </div>
             </div>
         </div>
 

@@ -65,12 +65,13 @@ class ColocationController extends Controller
         'creator',
         'categories.user',   // récupère les catégories et leur créateur
         'depenses.user',      // récupère les dépenses et leur auteur
-        'depenses.categorie',      // récupère la catégorie de chaque dépense
+        'depenses.categorie'      // récupère la catégorie de chaque dépense
         ])
         ->first();
 
         if ($colocationActive) {
             // L'utilisateur est déjà membre → afficher cette colocation seule
+
             return view('colocation', [
                 'colocation' => $colocationActive,
                 'dejaMembre' => true
@@ -80,7 +81,7 @@ class ColocationController extends Controller
             // L'utilisateur n'est membre d'aucune colocation → afficher toutes les colocations
 
             $colocations = $user->colocations()
-                                ->wherePivot('is_member', 'non'); // récupère les colocations que j'ai rejoindre
+                                ->wherePivot('is_member', 'non')->get(); // récupère les colocations que j'ai rejoindre
             return view('colocation', [
                 'colocations' => $colocations,
                 'dejaMembre' => false

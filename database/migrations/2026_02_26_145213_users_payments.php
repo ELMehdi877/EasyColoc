@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('users_payments', function(Blueprint $table){
             $table->id();
             $table->foreignId('user_id')->constrained('users')->name('users_payments_users_foreign');
-            $table->foreignId('payment_id')->constrained('payments')->name('users_payments_payments_foreign');
+            $table->foreignId('payment_id')->constrained('payments')->onDelete('cascade')->name('users_payments_payments_foreign');
             $table->decimal('amount_part', 10,2);
             $table->unique(['user_id', 'payment_id']);
             $table->enum('paid', ['yes', 'no'])->default('no');

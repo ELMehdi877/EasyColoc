@@ -11,8 +11,10 @@ class Payment extends Model
     use HasFactory;
 
     protected $fillable = [
+        'depense_id',
+        'colocation_id',
         'total_amount',
-        'paid',
+        'status',
     ];
 
     //Relation avec depense
@@ -23,6 +25,6 @@ class Payment extends Model
 
     // Relation avec user
     public function users() {
-        return $this->belongsToMany(User::class, 'users_payments')->withPivot('amount');
+        return $this->belongsToMany(User::class, 'users_payments')->withPivot('amount_part', 'paid');
     }
 }

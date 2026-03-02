@@ -44,18 +44,28 @@ class DepenseController extends Controller
 
         // 2️⃣ Créer un paiement lié à cette dépense
         $payment = Payment::create([
+            'depense_id' => $depense->id,
+            'colocation_id' => $colocation->id,
             'total_amount' => $depense->amount,
-            'paid' => 'no',
+            'status' => 'pending'
         ]);
 
         // 3️⃣ Récupérer tous les membres actifs
         $membres = $colocation->users()->wherePivot('is_member', 'oui')->get();
+
+        $nombreMembres = $membres->count();
+
+        if ($nombreMembres == 0) {
+            return back()->with('error', 'Aucun membre actif trouvé.');
+        }
+
         $part = $depense->amount / $membres->count(); // montant à partager
 
         // 4️⃣ Ajouter chaque membre dans users_payments avec le montant dû
         foreach ($membres as $membre) {
             $payment->users()->attach($membre->id, [
-                'amount_part' => $part
+                'amount_part' => $part,
+                'paid' => 'no'
             ]);
         }
 
