@@ -35,4 +35,10 @@ class Depense extends Model
     {
         return $this->belongsTo(Colocation::class);
     }
+
+    // Relation avec la payment
+    public function payments() 
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

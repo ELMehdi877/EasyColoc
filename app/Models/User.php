@@ -47,15 +47,23 @@ class User extends Authenticatable
         ];
     }
     
+    //Relation avec colocation one to many
     public function createdColocations()
     {
         return $this->hasMany(Colocation::class);
     }
 
+    //Relation avec colocation many to many 
     public function colocations()
     {
         return $this->belongsToMany(Colocation::class)
                     ->withPivot('role', 'is_member')
                     ->withTimestamps();
+    }
+
+    //Relation avec payment
+    public function payments()
+    {
+        return $this->belongsToMany(Payment::class, 'users_payments')->withPivot('amount');
     }
 }
