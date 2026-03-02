@@ -167,7 +167,7 @@
                     </div>
                 </div>
             </div> 
-    
+     
             <div class="grid grid-cols-2 gap-6 mb-10">
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Payé par</label>
