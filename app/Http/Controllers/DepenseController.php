@@ -69,6 +69,8 @@ class DepenseController extends Controller
      */
     public function destroy(Depense $depense)
     {
-        //
+        $depense->delete();
+
+        return back()->with('success', 'Dépense supprimée avec succès.');
     }
 }

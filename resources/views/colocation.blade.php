@@ -45,21 +45,57 @@
             </div>
 
             <div class="overflow-x-auto">
-                <table class="w-full text-left">
+                <table class="w-full text-left border-collapse">
                     <thead class="bg-gray-50/50">
                         <tr>
-                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest">Titre / Catégorie</th>
+                            <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-left">Titre / Catégorie</th>
                             <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Payeur</th>
                             <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-center">Montant</th>
                             <th class="px-6 py-4 text-[10px] font-black text-gray-400 uppercase tracking-widest text-right">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td colspan="4" class="px-6 py-20 text-center text-gray-400 italic text-sm">
-                                Aucune dépense pour le moment.
-                            </td>
-                        </tr>
+                        @if($colocation->depenses->isNotEmpty())
+                            @foreach($colocation->depenses as $depense)
+                                <tr class="hover:bg-gray-50 transition-colors text-sm">
+                                    <td class="px-6 py-4">
+                                        <p class="font-bold text-gray-800">{{ $depense->categorie->name }}</p>
+                                        <span class="text-[10px] bg-indigo-50 text-indigo-500 px-2 py-0.5 rounded uppercase font-bold">{{ $depense->titre }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center">
+                                        <span class="p-2 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center mx-auto text-xs font-black">{{ $depense->user->name }}</span>
+                                    </td>
+                                    <td class="px-6 py-4 text-center font-black text-gray-900">{{ $depense->amount }} DH</td>
+                                    <td class="px-6 py-4 text-right">
+                                        @php
+                                            $userRole = $colocation->users
+                                                ->firstWhere('id', auth()->id())?->pivot?->role;
+                                        @endphp
+                                        @if($userRole === 'owner' || $userRole === 'admin')
+                                            <form action="{{ route('depenses.destroy', $depense->id) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="w-8 h-8 flex items-center justify-center bg-red-100 hover:bg-red-200 rounded-full text-red-600 hover:text-red-800 transition-all">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6M1 7h22M8 7V4a1 1 0 011-1h6a1 1 0 011 1v3">
+                                                        </path>
+                                                    </svg>
+                                                </button>
+                                            </form>
+                                        @else
+                                            Action
+                                        @endif
+                                    </td>
+                                </tr>
+                            @endforeach
+                        @else
+                            <tr>
+                                <td colspan="4" class="px-6 py-20 text-center text-gray-400 italic text-sm">
+                                    Aucune dépense pour le moment.
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>

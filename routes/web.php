@@ -62,6 +62,10 @@ Route::middleware('auth')->group(function () {
     //ajouter une depense
     Route::post('/depense', [DepenseController::class, 'store'])
     ->name('depenses.store');
+    
+    //supprimer un depense
+    Route::delete('/depenses/{depense}', [DepenseController::class, 'destroy'])
+    ->name('depenses.destroy');
 
 });
 

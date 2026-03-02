@@ -64,7 +64,8 @@ class ColocationController extends Controller
         }, 
         'creator',
         'categories.user',   // récupère les catégories et leur créateur
-        'depenses.user'      // récupère les dépenses et leur auteur
+        'depenses.user',      // récupère les dépenses et leur auteur
+        'depenses.categorie',      // récupère la catégorie de chaque dépense
         ])
         ->first();
 
