@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Depense;
 use App\Http\Requests\StoreDepenseRequest;
 use App\Http\Requests\UpdateDepenseRequest;
+use App\Models\Payment;
+use Illuminate\Support\Facades\Auth;
 
 class DepenseController extends Controller
 {
@@ -29,15 +31,35 @@ class DepenseController extends Controller
      */
     public function store(StoreDepenseRequest $request)
     {
-        Depense::create([
-        'titre' => $request->titre,
-        'amount' => $request->amount,
-        'user_id' => auth()->id(),
-        'categorie_id' => $request->categorie_id,
-        'colocation_id' => $request->colocation_id,
-    ]);
+        $user = Auth::user();
+        $colocation = $user->colocations()->wherePivot('is_member', 'oui')->first();
 
-    return back()->with('success', 'Dépense ajoutée avec succès');
+        $depense = Depense::create([
+            'titre' => $request->titre,
+            'amount' => $request->amount,
+            'user_id' => auth()->id(),
+            'categorie_id' => $request->categorie_id,
+            'colocation_id' => $request->colocation_id,
+        ]);
+
+        // 2️⃣ Créer un paiement lié à cette dépense
+        $payment = Payment::create([
+            'total_amount' => $depense->amount,
+            'paid' => 'no',
+        ]);
+
+        // 3️⃣ Récupérer tous les membres actifs
+        $membres = $colocation->users()->wherePivot('is_member', 'oui')->get();
+        $part = $depense->amount / $membres->count(); // montant à partager
+
+        // 4️⃣ Ajouter chaque membre dans users_payments avec le montant dû
+        foreach ($membres as $membre) {
+            $payment->users()->attach($membre->id, [
+                'amount_part' => $part
+            ]);
+        }
+
+        return back()->with('success', 'Dépense ajoutée avec succès');
     }
 
     /**

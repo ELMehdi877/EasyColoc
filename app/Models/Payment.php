@@ -10,6 +10,11 @@ class Payment extends Model
     /** @use HasFactory<\Database\Factories\PaymentFactory> */
     use HasFactory;
 
+    protected $fillable = [
+        'total_amount',
+        'paid',
+    ];
+
     //Relation avec depense
     public function depense() 
     {

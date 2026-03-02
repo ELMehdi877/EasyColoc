@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained('users')->name('users_payments_users_foreign');
             $table->foreignId('payment_id')->constrained('payments')->name('users_payments_payments_foreign');
+            $table->decimal('amount_part', 10,2);
             $table->unique(['user_id', 'payment_id']);
-            
+            $table->enum('paid', ['yes', 'no'])->default('no');
+            $table->timestamps();
         });
     }
 
