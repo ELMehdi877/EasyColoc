@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('payment_id')->constrained('payments')->name('users_payments_payments_foreign');
             $table->unique(['user_id', 'payment_id']);
             
-        });
+        }); 
     }
 
     /**
