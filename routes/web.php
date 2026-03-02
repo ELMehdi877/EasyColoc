@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColocationController;
+use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -57,6 +58,10 @@ Route::middleware('auth')->group(function () {
     //cree une categorie
     Route::post('/colocations/{id}/categories', [CategoryController::class, 'store'])
     ->name('categories.store');
+
+    //ajouter une depense
+    Route::post('/depense', [DepenseController::class, 'store'])
+    ->name('depenses.store');
 
 });
 

@@ -139,12 +139,13 @@
         
         <h2 class="text-3xl font-bold text-gray-900 mb-8">Nouvelle dépense</h2>
         
-        <form  method="POST">
+        <form action="{{ route('depenses.store') }}" method="POST">
             @csrf
             
+            <input type="hidden" name="colocation_id" value="{{ $colocation->id }}">
             <div class="mb-6">
                 <label class="block text-sm font-semibold text-gray-700 mb-2">Titre</label>
-                <input type="text" name="title" placeholder="ex: Courses Intermarché" required
+                <input type="text" name="titre" placeholder="ex: Courses Intermarché" required
                     class="w-full px-5 py-4 rounded-2xl border-gray-200 bg-white text-gray-600 focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all placeholder:text-gray-300">
             </div>
 
@@ -154,18 +155,7 @@
                     <input type="number" step="0.01" name="amount" placeholder="0.00" required
                         class="w-full px-5 py-4 rounded-2xl border-gray-100 bg-gray-50/50 text-gray-600 focus:ring-2 focus:ring-indigo-500 transition-all">
                 </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Date</label>
-                    <div class="relative">
-                        <input type="date" name="date" value="{{ date('Y-m-d') }}" required
-                            class="w-full px-5 py-4 rounded-2xl border-gray-100 bg-gray-50/50 text-gray-600 focus:ring-2 focus:ring-indigo-500 transition-all appearance-none">
-                        <div class="absolute inset-y-0 right-4 flex items-center pointer-events-none">
-                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
+                
             </div> 
       
             <div class="grid grid-cols-2 gap-6 mb-10">
@@ -177,10 +167,10 @@
                 </div>
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">Catégorie</label>
-                    <select name="category" class="w-full px-5 py-4 rounded-2xl border-gray-100 bg-gray-50/50 text-gray-600 focus:ring-2 focus:ring-indigo-500 transition-all appearance-none">
+                    <select name="categorie_id" class="w-full px-5 py-4 rounded-2xl border-gray-100 bg-gray-50/50 text-gray-600 focus:ring-2 focus:ring-indigo-500 transition-all appearance-none">
                         <option value="" disabled selected>Choisissez une catégorie</option>
                        @foreach($colocation->categories as $categorie)
-                            <option value="{{ $categorie->name }}">{{ $categorie->name }}</option>
+                            <option value="{{ $categorie->id }}">{{ $categorie->name }}</option>
                         @endforeach 
                    
                     </select>

@@ -9,4 +9,30 @@ class Depense extends Model
 {
     /** @use HasFactory<\Database\Factories\DepenseFactory> */
     use HasFactory;
+
+    protected $fillable = [
+        'user_id',
+        'colocation_id',
+        'categorie_id',
+        'titre',
+        'amount',
+    ];
+
+    // Relation avec l'utilisateur (créateur de la dépense)
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    // Relation avec la catégorie
+    public function categorie()
+    {
+        return $this->belongsTo(Category::class);
+    }
+
+    // Relation avec la colocation
+    public function colocation()
+    {
+        return $this->belongsTo(Colocation::class);
+    }
 }

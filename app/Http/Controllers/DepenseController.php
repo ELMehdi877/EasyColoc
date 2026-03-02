@@ -29,7 +29,15 @@ class DepenseController extends Controller
      */
     public function store(StoreDepenseRequest $request)
     {
-        //
+        Depense::create([
+        'titre' => $request->titre,
+        'amount' => $request->amount,
+        'user_id' => auth()->id(),
+        'categorie_id' => $request->categorie_id,
+        'colocation_id' => $request->colocation_id,
+    ]);
+
+    return back()->with('success', 'Dépense ajoutée avec succès');
     }
 
     /**
