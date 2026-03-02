@@ -106,8 +106,34 @@
         <div>
             <h3 class="text-xl font-bold text-gray-800 mb-6">Qui doit à qui ?</h3>
             <div class="bg-white rounded-3xl border border-gray-100 shadow-sm p-10 flex flex-col items-center justify-center text-center">
-                <div class="bg-white rounded-3xl border border-gray-100 p-10 flex flex-col items-center justify-center text-center">
-                    <p class="text-gray-400 text-sm italic font-medium">Aucun remboursement en attente.</p>
+                <div class="space-y-4">
+                    @forelse($remboursements as $r)
+                        <div class="bg-gray-50/50 border border-gray-100 rounded-[2rem] p-6 flex items-center justify-between shadow-sm">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="text-gray-900 font-bold text-lg">{{ $r['debiteur'] }}</span>
+                                    <svg class="w-5 h-5 text-indigo-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                    </svg>
+                                    <span class="text-gray-900 font-bold text-lg">{{ $r['creditor'] }}</span>
+                                </div>
+                                
+                                <div class="text-[#10b981] font-black text-xl tracking-tight">
+                                    {{ $r['montant'] }} DH
+                                </div>
+                            </div>
+
+                            <form action="{{ route('payments.pay', $r['payment_id']) }}" method="POST">
+                                @csrf
+                                <button type="submit" class="px-2 py-1 bg-blue-100 text-blue-600 rounded">Marquer payé</button>
+                            </form>
+
+                        </div>
+                    @empty
+                        <div class="bg-white rounded-3xl border border-gray-100 p-10 flex flex-col items-center justify-center text-center">
+                            <p class="text-gray-400 text-sm italic font-medium">Aucun remboursement en attente.</p>
+                        </div>
+                    @endforelse
                 </div>
             </div>
         </div>

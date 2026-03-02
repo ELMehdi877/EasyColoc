@@ -63,4 +63,36 @@ class PaymentController extends Controller
     {
         //
     }
+
+    public function markAsPaid(Payment $payment)
+    {
+        $user = auth()->user();
+
+        // 1️⃣ Trouver la ligne pivot de cet utilisateur
+        $userPayment = $payment->users()
+            ->where('user_id', $user->id)
+            ->first();
+
+        if (!$userPayment) {
+            return back()->with('error', 'Paiement introuvable.');
+        }
+
+        // 2️⃣ Marquer comme payé
+        $payment->users()->updateExistingPivot($user->id, [
+            'paid' => 'yes'
+        ]);
+
+        // 3️⃣ Vérifier si tous les membres ont payé
+        $remaining = $payment->users()
+            ->wherePivot('paid', 'no')
+            ->count();
+
+        if ($remaining === 0) {
+            $payment->update([
+                'status' => 'completed'
+            ]);
+        }
+
+        return back()->with('success', 'Paiement effectué !');
+    }
 }

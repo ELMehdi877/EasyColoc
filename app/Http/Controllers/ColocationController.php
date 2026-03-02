@@ -60,20 +60,46 @@ class ColocationController extends Controller
         $colocationActive = $user->colocations()
         ->wherePivot('is_member', 'oui')
         ->with(['users' => function ($query) {
-            $query->withPivot('role', 'is_member');
+            $query->withPivot('role', 'is_member'); // tous les membres avec rôle
         }, 
-        'creator',
+        'creator',  //// créateur de la colocation
         'categories.user',   // récupère les catégories et leur créateur
         'depenses.user',      // récupère les dépenses et leur auteur
-        'depenses.categorie'      // récupère la catégorie de chaque dépense
+        'depenses.categorie',      // récupère la catégorie de chaque dépense
+        'depenses.payment.users', // récupère la payment avec users de chaque dépense
         ])
         ->first();
 
         if ($colocationActive) {
             // L'utilisateur est déjà membre → afficher cette colocation seule
+            $remboursements = [];
+
+            foreach ($colocationActive->depenses as $depense) {
+
+                $payer = $depense->user;
+
+                $payment = $depense->payment;
+
+            if ($payment) {
+
+                foreach ($payment->users as $debiteur) {
+
+                    if ($debiteur->pivot->paid == 'no' && $debiteur->id != $payer->id) {
+
+                        $remboursements[] = [
+                            'debiteur' => $debiteur->name,
+                            'creditor' => $payer->name,
+                            'montant' => $debiteur->pivot->amount_part,
+                            'payment_id' => $payment->id,
+                        ];
+                    }
+                }
+            }
+            }
 
             return view('colocation', [
                 'colocation' => $colocationActive,
+                'remboursements' => $remboursements,
                 'dejaMembre' => true
             ]);
             

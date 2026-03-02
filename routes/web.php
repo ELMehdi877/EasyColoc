@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColocationController;
 use App\Http\Controllers\DepenseController;
 use App\Http\Controllers\InvitationController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -51,22 +52,25 @@ Route::middleware('auth')->group(function () {
         return view('administration');
     });
 
-    //inviter par token
+    // inviter par token
     Route::get('/invitations/{token}', [InvitationController::class, 'accept'])
     ->name('invitations.accept');
 
-    //cree une categorie
+    // cree une categorie
     Route::post('/colocations/{id}/categories', [CategoryController::class, 'store'])
     ->name('categories.store');
 
-    //ajouter une depense
+    // ajouter une depense
     Route::post('/depense', [DepenseController::class, 'store'])
     ->name('depenses.store');
     
-    //supprimer un depense
+    // supprimer un depense
     Route::delete('/depenses/{depense}', [DepenseController::class, 'destroy'])
     ->name('depenses.destroy');
 
+    // marquer payer
+    Route::post('/payments/{payment}/pay', [PaymentController::class, 'markAsPaid'])
+    ->name('payments.pay');
 });
 
 require __DIR__.'/auth.php';
