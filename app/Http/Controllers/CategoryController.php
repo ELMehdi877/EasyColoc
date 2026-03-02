@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Http\Requests\StoreCategoryRequest;
 use App\Http\Requests\UpdateCategoryRequest;
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -27,9 +28,15 @@ class CategoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreCategoryRequest $request)
+    public function store(StoreCategoryRequest $request, $colocationId)
     {
-        //
+        Category::create([
+            'name' => $request->name,
+            'user_id' => Auth::id(),
+            'colocation_id' => $colocationId,
+        ]);
+        
+        return back()->with('success', 'Catégorie ajoutée avec succès.');
     }
 
     /**

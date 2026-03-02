@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ColocationController;
 use App\Http\Controllers\InvitationController;
 use App\Http\Controllers\ProfileController;
@@ -11,6 +12,7 @@ Route::get('/', function () {
 
 // Dashboard
 Route::get('/dashboard', function () {
+
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
@@ -48,8 +50,13 @@ Route::middleware('auth')->group(function () {
         return view('administration');
     });
 
+    //inviter par token
     Route::get('/invitations/{token}', [InvitationController::class, 'accept'])
     ->name('invitations.accept');
+
+    //cree une categorie
+    Route::post('/colocations/{id}/categories', [CategoryController::class, 'store'])
+    ->name('categories.store');
 
 });
 

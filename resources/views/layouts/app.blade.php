@@ -56,9 +56,14 @@
                 <div class="flex items-center gap-4">
                     @yield('header_actions')
                     <div class="flex items-center bg-white p-1 pr-4 rounded-full border border-gray-100 shadow-sm">
-                        <div class="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center font-bold">U</div>
+                        {{-- @php
+                            $currentUser = $colocation->users
+                                ->where('id', auth()->id())
+                                ->first();
+                        @endphp --}} 
+                        <div class="rounded-full bg-gray-900 text-white flex items-center justify-center font-bold"> name </div>
                         <div class="ml-3 text-left">
-                            <p class="text-xs font-bold text-gray-900">USER 2</p>
+                            <p class="text-xs font-bold text-gray-900">role</p>
                             <p class="text-[10px] text-green-500 font-bold uppercase tracking-tighter italic">En ligne</p>
                         </div>
                     </div>

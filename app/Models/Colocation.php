@@ -27,4 +27,14 @@ class Colocation extends Model
             ->withPivot('role', 'is_member')
             ->withTimestamps();
     }
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
+
+     public function depenses()
+    {
+        return $this->hasMany(Depense::class); 
+    }
 }

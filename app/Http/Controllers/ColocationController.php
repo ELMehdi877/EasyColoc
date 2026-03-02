@@ -56,9 +56,17 @@ class ColocationController extends Controller
         $user = Auth::user();
 
         // Vérifie si l'utilisateur est membre actif d'une colocation
+       
         $colocationActive = $user->colocations()
-                                ->wherePivot('is_member', 'oui')
-                                ->first(); // récupère la première colocation active
+        ->wherePivot('is_member', 'oui')
+        ->with(['users' => function ($query) {
+            $query->withPivot('role', 'is_member');
+        }, 
+        'creator',
+        'categories.user',   // récupère les catégories et leur créateur
+        'depenses.user'      // récupère les dépenses et leur auteur
+        ])
+        ->first();
 
         if ($colocationActive) {
             // L'utilisateur est déjà membre → afficher cette colocation seule
@@ -69,7 +77,6 @@ class ColocationController extends Controller
             
         } else {
             // L'utilisateur n'est membre d'aucune colocation → afficher toutes les colocations
-            // $colocations = Colocation::with('users', 'creator')->get();
 
             $colocations = $user->colocations()
                                 ->wherePivot('is_member', 'non'); // récupère les colocations que j'ai rejoindre
