@@ -37,7 +37,7 @@ class ColocationController extends Controller
             
         ]);
         
-        // 2️⃣ ajouter automatiquement le créateur comme membre
+        // ajouter automatiquement le créateur comme membre
         $colocation->users()->attach(Auth::id(), [
             'role' => 'owner',
             'is_member' => 'oui',

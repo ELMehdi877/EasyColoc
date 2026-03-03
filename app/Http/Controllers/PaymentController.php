@@ -68,7 +68,7 @@ class PaymentController extends Controller
     {
         $user = auth()->user();
 
-        // 1️⃣ Trouver la ligne pivot de cet utilisateur
+        // Trouver la ligne pivot de cet utilisateur
         $userPayment = $payment->users()
             ->where('user_id', $user->id)
             ->first();
@@ -77,12 +77,12 @@ class PaymentController extends Controller
             return back()->with('error', 'Paiement introuvable.');
         }
 
-        // 2️⃣ Marquer comme payé
+        // Marquer comme payé
         $payment->users()->updateExistingPivot($user->id, [
             'paid' => 'yes'
         ]);
 
-        // 3️⃣ Vérifier si tous les membres ont payé
+        // Vérifier si tous les membres ont payé
         $remaining = $payment->users()
             ->wherePivot('paid', 'no')
             ->count();

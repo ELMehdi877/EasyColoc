@@ -42,7 +42,7 @@ class DepenseController extends Controller
             'colocation_id' => $request->colocation_id,
         ]);
 
-        // 2️⃣ Créer un paiement lié à cette dépense
+        // Créer un paiement lié à cette dépense
         $payment = Payment::create([
             'depense_id' => $depense->id,
             'colocation_id' => $colocation->id,
@@ -50,7 +50,7 @@ class DepenseController extends Controller
             'status' => 'pending'
         ]);
 
-        // 3️⃣ Récupérer tous les membres actifs
+        // Récupérer tous les membres actifs
         $membres = $colocation->users()->wherePivot('is_member', 'oui')->get();
 
         $nombreMembres = $membres->count();
@@ -61,7 +61,7 @@ class DepenseController extends Controller
 
         $part = $depense->amount / $membres->count(); // montant à partager
 
-        // 4️⃣ Ajouter chaque membre dans users_payments avec le montant dû
+        // Ajouter chaque membre dans users_payments avec le montant dû
         foreach ($membres as $membre) {
             $payment->users()->attach($membre->id, [
                 'amount_part' => $part,
